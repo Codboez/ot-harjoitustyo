@@ -2,3 +2,9 @@
 #### Viikko1
 * [komentorivi.txt](https://github.com/Codboez/ot-harjoitustyo/blob/master/laskarit/viikko1/komentorivi.txt)
 * [gitlog.txt](https://github.com/Codboez/ot-harjoitustyo/blob/master/laskarit/viikko1/gitlog.txt)
+#### Viikko2
+* [Maksukortti](https://github.com/Codboez/ot-harjoitustyo/tree/master/laskarit/viikko2/maksukortti)
+* [Unicafe](https://github.com/Codboez/ot-harjoitustyo/tree/master/laskarit/viikko2/unicafe)
+* [Testikattavuusraportti](https://github.com/Codboez/ot-harjoitustyo/blob/master/laskarit/viikko2/testikattavuusraportti.PNG)
+* [Vaatimusmäärittely](https://github.com/Codboez/ot-harjoitustyo/blob/master/dokumentaatio/vaatimusmaarittely.md)
+* [Tuntikirjanpito](https://github.com/Codboez/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
