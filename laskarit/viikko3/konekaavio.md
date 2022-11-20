@@ -1,0 +1,17 @@
+```mermaid
+sequenceDiagram
+  main->>+machine:Machine()
+  machine->>fueltank:FuelTank()
+  machine->>fueltank:fill(40)
+  machine->>engine:Engine(fueltank)
+  machine-->>-main: 
+  main->>+machine:drive()
+  machine->>+engine:start()
+  engine->>fueltank:consume(5)
+  engine-->>-machine: 
+  machine->>+engine:is_running()
+  engine-->>-machine:True
+  machine->>+engine:use_energy()
+  engine->>fueltank:consume(10)
+  engine-->>-machine: 
+  machine-->>-main: 
