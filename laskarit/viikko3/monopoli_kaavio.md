@@ -7,13 +7,13 @@ classDiagram
   Ruutu "1" -- Ruutu
   Pelaaja "1" -- "1" Pelinappula
   Pelinappula "*" -- "1" Ruutu
-  Aloitusruutu ..> Ruutu
-  Vankila ..> Ruutu
-  Sattuma ..> Ruutu
-  Yhteismaa ..> Ruutu
-  Asema ..> Ruutu
-  Laitos ..> Ruutu
-  Katu ..> Ruutu
+  Aloitusruutu --|> Ruutu
+  Vankila --|> Ruutu
+  Sattuma --|> Ruutu
+  Yhteismaa --|> Ruutu
+  Asema --|> Ruutu
+  Laitos --|> Ruutu
+  Katu --|> Ruutu
   Sattuma -- "*" Kortti
   Yhteismaa -- "*" Kortti
   Ruutu "*" -- "1" Toiminto
