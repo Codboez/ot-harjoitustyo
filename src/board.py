@@ -8,7 +8,7 @@ class Board:
         self.__mine_chance = mine_chance
         self.__has_generated = False
         self.__board = []
-        self.open_cell((3, 3))
+        self.add_cells()
 
     def open_cell(self, pos: tuple) -> bool:
         if not self.__has_generated:
@@ -33,20 +33,14 @@ class Board:
         if self.__has_generated:
             return
 
-        for i in range(self.height):
-            row = []
-            for j in range(self.width):
-                if (j in range(start_pos[0] - 1, start_pos[0] + 1)
-                 and i in range(start_pos[1] - 1, start_pos[1] + 1)):
-                    row.append(Cell(self, (j, i), content=0))
+        for i, row in enumerate(self.__board):
+            for j, cell in enumerate(row):
+                if (j in range(start_pos[0] - 1, start_pos[0] + 2)
+                 and i in range(start_pos[1] - 1, start_pos[1] + 2)):
                     continue
 
                 if random.randint(0, 100) <= self.__mine_chance:
-                    row.append(Cell(self, (j, i), content=-1))
-                else:
-                    row.append(Cell(self, (j, i), content=0))
-
-            self.__board.append(row)
+                    cell.content = -1
 
     def generate_numbers(self):
         if self.__has_generated:
@@ -88,7 +82,7 @@ class Board:
                 if self.is_out_of_bounds((j, i)):
                     continue
 
-                if self.__board[pos[1]][pos[0]].hidden:
+                if self.__board[i][j].hidden:
                     self.open_cell((j, i))
 
     def get_board(self):
@@ -101,3 +95,10 @@ class Board:
                 row_print += ("m " if cell.content == -1
                  else str(cell.content) + " ")
             print(row_print)
+
+    def add_cells(self):
+        for i in range(self.height):
+            row = []
+            for j in range(self.width):
+                row.append(Cell(self, (j, i)))
+            self.__board.append(row)

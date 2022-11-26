@@ -30,6 +30,8 @@ class UI:
                 return False
             elif event.type == pygame.MOUSEMOTION:
                 self.__current_view.mouse_pos = event.pos
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.__current_view.click(event.button)
         return True
 
     def change_state(self, state: int, board):

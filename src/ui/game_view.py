@@ -14,15 +14,15 @@ class GameView:
         pygame.display.flip()
 
     def render_board(self, screen):
-        for i, row in enumerate(self.__board.get_board()):
-            for j, cell in enumerate(row):
+        for row in self.__board.get_board():
+            for cell in row:
                 self.render_cell(screen, cell)
 
     def render_cell(self, screen, cell):
         if cell.hidden:
             cell.button.render(screen)
         else:
-            pygame.draw.rect(screen, (160, 160, 160), pygame.Rect(cell.pos[0], cell.pos[1], cell.size, cell.size))
+            pygame.draw.rect(screen, (200, 200, 200), pygame.Rect(cell.pos[0], cell.pos[1], cell.size, cell.size))
             text = self.__font.render(f"{cell.content}", True, (0, 0, 0))
             screen.blit(text, (cell.pos[0] + cell.size / 2 - 5, cell.pos[1] + 3))
 
@@ -34,3 +34,9 @@ class GameView:
         for i, row in enumerate(self.__board.get_board()):
             for j, cell in enumerate(row):
                 cell.button.update_hovered(self.mouse_pos)
+
+    def click(self, button):
+        for row in self.__board.get_board():
+            for cell in row:
+                if cell.button.hovered:
+                    cell.button.click(button)

@@ -15,6 +15,5 @@ class Cell:
         self.button = Button(self.pos[0], self.pos[1], 35, 35, button_action)
 
     def __calculate_position(self, indexes):
-        print(self.__board.width)
         return (1280 / 2 - self.__board.width / 2 * self.size + indexes[0] * (self.size + 1),
                     720 / 2 - self.__board.height / 2 * self.size + indexes[1] * (self.size + 1))
