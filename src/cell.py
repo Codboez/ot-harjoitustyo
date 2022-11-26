@@ -3,3 +3,4 @@ class Cell:
         self.content = content
         self.hidden = hidden
         self.flagged = flagged
+        

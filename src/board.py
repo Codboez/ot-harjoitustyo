@@ -8,33 +8,36 @@ class Board:
         self.__mine_chance = mine_chance
         self.__has_generated = False
         self.__board = []
+        self.open_cell((3, 3))
 
-    def open_cell(self, x: int, y: int) -> bool:
+    def open_cell(self, pos: tuple) -> bool:
         if not self.__has_generated:
-            self.generate((x, y))
+            self.generate((pos[0], pos[1]))
 
-        if self.is_out_of_bounds(x, y):
+        if self.is_out_of_bounds(pos):
             return False
 
-        cell = self.__board[y][x]
+        cell = self.__board[pos[1]][pos[0]]
         cell.hidden = False
 
         if cell.content == 0:
-            self.open_around_cell(x, y)
+            self.open_around_cell((pos[0], pos[1]))
 
         return True
 
-    def is_out_of_bounds(self, x: int, y: int) -> bool:
-        return x < 0 or x >= len(self.__board[0]) or y < 0 or y >= len(self.__board)
+    def is_out_of_bounds(self, pos: tuple) -> bool:
+        return (pos[0] < 0 or pos[0] >= len(self.__board[0])
+         or pos[1] < 0 or pos[1] >= len(self.__board))
 
     def generate_mines(self, start_pos: tuple):
         if self.__has_generated:
             return
 
-        for y in range(self.__height):
+        for i in range(self.__height):
             row = []
-            for x in range(self.__width):
-                if x in range(start_pos[0] - 1, start_pos[0] + 1) and y in range(start_pos[1] - 1, start_pos[1] + 1):
+            for j in range(self.__width):
+                if (j in range(start_pos[0] - 1, start_pos[0] + 1)
+                 and i in range(start_pos[1] - 1, start_pos[1] + 1)):
                     row.append(Cell(content=0))
                     continue
 
@@ -49,21 +52,21 @@ class Board:
         if self.__has_generated:
             return
         self.print()
-        for y in range(len(self.__board)):
-            for x in range(len(self.__board[y])):
-                if self.__board[y][x].content == -1:
+        for i, row in enumerate(self.__board):
+            for j, cell in enumerate(row):
+                if cell.content == -1:
                     continue
 
-                self.__board[y][x].content = self.count_mines_around_cell(x, y)
+                cell.content = self.count_mines_around_cell((j, i))
 
-    def count_mines_around_cell(self, x: int, y: int) -> int:
+    def count_mines_around_cell(self, pos: tuple) -> int:
         amount = 0
-        for i in range(y - 1, y + 2):
-            for j in range(x - 1, x + 2):
-                if j == x and i == y:
+        for i in range(pos[1] - 1, pos[1] + 2):
+            for j in range(pos[0] - 1, pos[0] + 2):
+                if j == pos[0] and i == pos[1]:
                     continue
 
-                if self.is_out_of_bounds(j, i):
+                if self.is_out_of_bounds((j, i)):
                     continue
 
                 if self.__board[i][j].content == -1:
@@ -76,24 +79,25 @@ class Board:
         self.generate_numbers()
         self.__has_generated = True
 
-    def open_around_cell(self, x: int, y: int):
-        for i in range(y - 1, y + 2):
-            for j in range(x - 1, x + 2):
-                if j == x and i == y:
+    def open_around_cell(self, pos: tuple):
+        for i in range(pos[1] - 1, pos[1] + 2):
+            for j in range(pos[0] - 1, pos[0] + 2):
+                if j == pos[0] and i == pos[1]:
                     continue
 
-                if self.is_out_of_bounds(j, i):
+                if self.is_out_of_bounds((j, i)):
                     continue
 
-                if self.__board[y][x].hidden:
-                    self.open_cell(j, i)
+                if self.__board[pos[1]][pos[0]].hidden:
+                    self.open_cell((j, i))
 
     def get_board(self):
         return self.__board
 
     def print(self):
-        for i in range(len(self.__board)):
-            row = ""
-            for j in range(len(self.__board[i])):
-                row += "m " if self.__board[i][j].content == -1 else str(self.__board[i][j].content) + " "
-            print(row)
+        for board_row in self.__board:
+            row_print = ""
+            for cell in board_row:
+                row_print += ("m " if cell.content == -1
+                 else str(cell.content) + " ")
+            print(row_print)
