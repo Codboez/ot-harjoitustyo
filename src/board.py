@@ -3,8 +3,8 @@ from cell import Cell
 
 class Board:
     def __init__(self, width: int, height: int, mine_chance: int) -> None:
-        self.__width = width
-        self.__height = height
+        self.width = width
+        self.height = height
         self.__mine_chance = mine_chance
         self.__has_generated = False
         self.__board = []
@@ -33,25 +33,25 @@ class Board:
         if self.__has_generated:
             return
 
-        for i in range(self.__height):
+        for i in range(self.height):
             row = []
-            for j in range(self.__width):
+            for j in range(self.width):
                 if (j in range(start_pos[0] - 1, start_pos[0] + 1)
                  and i in range(start_pos[1] - 1, start_pos[1] + 1)):
-                    row.append(Cell(content=0))
+                    row.append(Cell(self, (j, i), content=0))
                     continue
 
                 if random.randint(0, 100) <= self.__mine_chance:
-                    row.append(Cell(content=-1))
+                    row.append(Cell(self, (j, i), content=-1))
                 else:
-                    row.append(Cell(content=0))
+                    row.append(Cell(self, (j, i), content=0))
 
             self.__board.append(row)
 
     def generate_numbers(self):
         if self.__has_generated:
             return
-        self.print()
+
         for i, row in enumerate(self.__board):
             for j, cell in enumerate(row):
                 if cell.content == -1:
