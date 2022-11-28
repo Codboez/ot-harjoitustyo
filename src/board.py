@@ -39,7 +39,7 @@ class Board:
                  and i in range(start_pos[1] - 1, start_pos[1] + 2)):
                     continue
 
-                if random.randint(0, 100) <= self.__mine_chance:
+                if random.randint(1, 100) <= self.__mine_chance:
                     cell.content = -1
 
     def generate_numbers(self):
