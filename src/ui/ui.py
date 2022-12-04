@@ -1,13 +1,14 @@
 import pygame
 from ui.game_view import GameView
+from ui.start_view import StartView
 
 class UI:
     def __init__(self, screen_width: int, screen_height: int) -> None:
         self.create_window(screen_width, screen_height)
         self.__current_view = None
         self.__state = -1
-        self.mouse_position = (0, 0)
-        self.font = pygame.font.SysFont("timesnewroman", 24)
+        font = pygame.font.match_font("timesnewroman")
+        self.font = (pygame.font.Font(font, 24), font)
 
     def create_window(self, width, height):
         pygame.init()
@@ -34,13 +35,16 @@ class UI:
                 self.__current_view.click(event.button)
         return True
 
-    def change_state(self, state: int, board):
+    def change_state(self, state: int, board, game):
         if state == self.__state:
             return
 
         if state == 0:
-            self.__current_view = GameView(board, self.font)
+            self.__current_view = GameView(board, self.font, game)
         elif state == 1:
-            pass
+            self.__current_view = StartView(self.font, game)
         
         self.__state = state
+
+    def get_font_with_new_size(self, size: int) -> pygame.font.Font:
+        return pygame.font.Font(self.font[1], size)

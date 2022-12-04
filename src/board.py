@@ -2,12 +2,17 @@ import random
 from cell import Cell
 
 class Board:
-    def __init__(self, width: int, height: int, mine_chance: int) -> None:
+    def __init__(self, width: int, height: int, mine_chance: int, font, game) -> None:
         self.width = width
         self.height = height
         self.__mine_chance = mine_chance
         self.__has_generated = False
         self.__board = []
+        self.mines_non_flagged = 0
+        self.font = font
+        self.__game = game
+        self.game_over = False
+        self.calculate_cell_size()
         self.add_cells()
 
     def open_cell(self, pos: tuple) -> bool:
@@ -19,9 +24,17 @@ class Board:
 
         cell = self.__board[pos[1]][pos[0]]
         cell.hidden = False
+        cell.button.color = (200, 200, 200)
+        cell.button.hover_color = (200, 200, 200)
+        cell.button.text = str(cell.content)
 
         if cell.content == 0:
             self.open_around_cell((pos[0], pos[1]))
+        elif cell.content == -1:
+            self.lose()
+
+        if self.check_win():
+            self.win()
 
         return True
 
@@ -41,6 +54,7 @@ class Board:
 
                 if random.randint(1, 100) <= self.__mine_chance:
                     cell.content = -1
+                    self.mines_non_flagged += 1
 
     def generate_numbers(self):
         if self.__has_generated:
@@ -100,5 +114,36 @@ class Board:
         for i in range(self.height):
             row = []
             for j in range(self.width):
-                row.append(Cell(self, (j, i)))
+                row.append(Cell(self, (j, i), self.font))
             self.__board.append(row)
+
+    def lose(self):
+        self.game_over = True
+
+    def win(self):
+        self.game_over = True
+
+    def check_win(self) -> bool:
+        for row in self.__board:
+            for cell in row:
+                if cell.hidden and cell.content != -1:
+                    return False
+
+        return True
+
+    def calculate_cell_size(self):
+        Cell.size = 35
+
+        if self.width * Cell.size > 1100:
+            Cell.size = 1100 // self.width
+
+        if self.height * Cell.size > 525:
+            Cell.size = 525 // self.height
+
+        self.calculate_cell_font_size()
+
+    def calculate_cell_font_size(self):
+        if self.__game == None:
+            return self.font
+
+        self.font = self.__game.create_font_with_new_size(Cell.size - 10)
