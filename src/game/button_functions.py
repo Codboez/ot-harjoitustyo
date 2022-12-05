@@ -30,13 +30,11 @@ def open_around_an_open_cell(board, pos):
     for i in range(pos[1] - 1, pos[1] + 2):
         for j in range(pos[0] - 1, pos[0] + 2):
             if board.is_out_of_bounds((j, i)):
-                print("Out of bounds")
                 continue
 
             cell = board.get_board()[i][j]
 
             if cell.content == -1 and not cell.flagged:
-                print(f"Cannot open: {j}, {i}")
                 return
-    print("Opening around cell")
+
     board.open_around_cell(pos, False)
