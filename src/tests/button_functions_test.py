@@ -1,6 +1,6 @@
 import unittest
-import button_functions
-from board import Board
+from game import button_functions
+from game.board import Board
 
 class TestButtonFunctions(unittest.TestCase):
     def test_open_cell_opens_a_cell(self):

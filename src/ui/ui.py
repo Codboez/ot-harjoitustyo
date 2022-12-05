@@ -5,10 +5,10 @@ from ui.start_view import StartView
 class UI:
     def __init__(self, screen_width: int, screen_height: int) -> None:
         self.create_window(screen_width, screen_height)
-        self.__current_view = None
+        self.current_view = None
         self.__state = -1
-        font = pygame.font.match_font("timesnewroman")
-        self.font = (pygame.font.Font(font, 24), font)
+        font_path = pygame.font.match_font("timesnewroman")
+        self.font = (pygame.font.Font(font_path, 24), font_path)
 
     def create_window(self, width, height):
         pygame.init()
@@ -21,7 +21,7 @@ class UI:
         if self.__state == -1:
             return
 
-        self.__current_view.update(self.screen)
+        self.current_view.update(self.screen)
         return True
 
     def check_events(self) -> bool:
@@ -30,9 +30,11 @@ class UI:
                 pygame.quit()
                 return False
             elif event.type == pygame.MOUSEMOTION:
-                self.__current_view.mouse_pos = event.pos
+                self.current_view.mouse_pos = event.pos
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.__current_view.click(event.button)
+                self.current_view.click(event.button)
+            elif event.type == pygame.KEYDOWN:
+                self.current_view.keydown(event.unicode)
         return True
 
     def change_state(self, state: int, board, game):
@@ -40,9 +42,9 @@ class UI:
             return
 
         if state == 0:
-            self.__current_view = GameView(board, self.font, game)
+            self.current_view = GameView(board, self.font, game)
         elif state == 1:
-            self.__current_view = StartView(self.font, game)
+            self.current_view = StartView(self.font, game)
         
         self.__state = state
 

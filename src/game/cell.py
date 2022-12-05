@@ -1,6 +1,6 @@
 import functools
 from ui.button import Button
-import button_functions
+from game import button_functions
 
 class Cell:
     size = 35

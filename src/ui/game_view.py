@@ -1,7 +1,7 @@
 import pygame
 import functools
-from board import Board
-from cell import Cell
+from game.board import Board
+from game.cell import Cell
 from ui.button import Button
 
 class GameView:
@@ -18,6 +18,7 @@ class GameView:
         screen.fill((255, 255, 255))
         self.render_board(screen)
         self.render_buttons(screen)
+        self.render_messages(screen)
         pygame.display.flip()
 
     def render_board(self, screen):
@@ -42,6 +43,7 @@ class GameView:
             for cell in row:
                 if cell.button.hovered and not self.__board.game_over:
                     cell.button.click(mouse_button)
+                    self.__board.open_cell_recursion_stack_size = 0
 
         for button in self.__buttons:
             if button.hovered:
@@ -83,4 +85,10 @@ class GameView:
 
     def render_messages(self, screen):
         for message in self.__messages:
-            pass
+            message.render(screen)
+
+    def add_message(self, message):
+        self.__messages.append(message)
+
+    def keydown(self, key):
+        pass
