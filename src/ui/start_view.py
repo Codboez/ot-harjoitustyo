@@ -2,6 +2,7 @@ import pygame
 import functools
 from ui.button import Button
 from ui.input_field import InputField
+from ui.text_object import TextObject
 from game import button_functions
 
 class StartView:
@@ -11,6 +12,7 @@ class StartView:
         self.__buttons = []
         self.__input_fields = []
         self.__game = game
+        self.__messages = []
         self.add_input_fields()
         self.add_buttons()
 
@@ -22,6 +24,7 @@ class StartView:
         screen.fill((255, 255, 255))
         self.render_buttons(screen)
         self.render_input_fields(screen)
+        self.render_messages(screen)
         pygame.display.flip()
 
     def click(self, mouse_button):
@@ -85,3 +88,16 @@ class StartView:
         for input_field in self.__input_fields:
             if input_field.selected:
                 input_field.add_char(key)
+
+    def render_messages(self, screen):
+        for message in self.__messages:
+            message.render(screen)
+
+    def add_message(self, message):
+        self.__messages.append(message)
+
+    def add_error_message(self, text, pos):
+        self.add_message(TextObject(text, pos, self.__font[0], (255, 0, 0)))
+
+    def delete_messages(self):
+        self.__messages.clear()

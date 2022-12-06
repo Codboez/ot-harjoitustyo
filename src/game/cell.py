@@ -19,10 +19,10 @@ class Cell:
 
     def __calculate_position(self, indexes):
         board_center = (1280 / 2, 720 / 2 + 70)
-        all_cells_width = self.__board.width * Cell.size
-        all_cells_height = self.__board.height * Cell.size
+        all_cells_width = self.__board.size[0] * Cell.size
+        all_cells_height = self.__board.size[1] * Cell.size
         location_in_board = (indexes[0] * (Cell.size + 1), indexes[1] * (Cell.size + 1))
-        gaps_between_cells_size = (self.__board.width - 1, self.__board.height - 1)
+        gaps_between_cells_size = (self.__board.size[0] - 1, self.__board.size[1] - 1)
 
         return (board_center[0] - all_cells_width / 2 + location_in_board[0] -
                 gaps_between_cells_size[0] / 2, board_center[1] - all_cells_height / 2 +

@@ -4,19 +4,18 @@ from ui.text_object import TextObject
 from game.cell import button_functions, Cell
 
 class Board:
-    def __init__(self, width: int, height: int, mine_chance: int, font, game) -> None:
-        self.width = width
-        self.height = height
+    def __init__(self, width: int, height: int, mine_chance: int, game) -> None:
+        self.size = (width, height)
         self.__mine_chance = mine_chance
         self.__has_generated = False
         self.__board = []
         self.mines_non_flagged = 0
-        self.font = font
         self.__game = game
         self.game_over = False
         self.open_cell_recursion_stack_size = 0
         self.calculate_cell_size()
-        self.add_cells()
+        font = self.calculate_cell_font_size()
+        self.add_cells(font)
 
     def open_cell(self, pos: tuple) -> bool:
         if not self.__has_generated:
@@ -117,15 +116,15 @@ class Board:
                               else str(cell.content) + " ")
             print(row_print)
 
-    def add_cells(self):
-        for i in range(self.height):
+    def add_cells(self, font):
+        for i in range(self.size[1]):
             row = []
-            for j in range(self.width):
-                row.append(Cell(self, (j, i), self.font))
+            for j in range(self.size[0]):
+                row.append(Cell(self, (j, i), font))
             self.__board.append(row)
 
     def lose(self):
-        if self.__game == None:
+        if self.__game is None:
             return
 
         self.game_over = True
@@ -134,7 +133,7 @@ class Board:
         self.__game.window.current_view.add_message(text_object)
 
     def win(self):
-        if self.__game == None:
+        if self.__game is None:
             return
 
         self.game_over = True
@@ -153,19 +152,17 @@ class Board:
     def calculate_cell_size(self):
         Cell.size = 35
 
-        if self.width * Cell.size > 1100:
-            Cell.size = 1100 // self.width
+        if self.size[0] * Cell.size > 1100:
+            Cell.size = 1100 // self.size[0]
 
-        if self.height * Cell.size > 525:
-            Cell.size = 525 // self.height
-
-        self.calculate_cell_font_size()
+        if self.size[1] * Cell.size > 525:
+            Cell.size = 525 // self.size[1]
 
     def calculate_cell_font_size(self):
         if self.__game is None:
-            return
+            return None
 
-        self.font = self.__game.create_font_with_new_size(Cell.size - 10)
+        return self.__game.create_font_with_new_size(Cell.size - 10)
 
     def update_cell(self, cell, pos):
         cell.hidden = False
@@ -176,12 +173,12 @@ class Board:
         cell.button.action = functools.partial(button_functions.open_around_an_open_cell, self, pos)
 
     def check_for_recursion_stack_overflow(self) -> bool:
-        if self.open_cell_recursion_stack_size > 450:
-            font = self.__game.create_font_with_new_size(20)
-            self.__game.window.current_view.add_message(
-                TextObject("Could not open any more cells in one click. " +
-                           "Game is still fully operational.", (350, 25), font, color=(255, 150, 0)))
-            return True
+        if self.open_cell_recursion_stack_size <= 450:
+            self.open_cell_recursion_stack_size += 1
+            return False
 
-        self.open_cell_recursion_stack_size += 1
-        return False
+        font = self.__game.create_font_with_new_size(20)
+        self.__game.window.current_view.add_message(
+            TextObject("Could not open any more cells in one click. " +
+                        "Game is still fully operational.", (350, 25), font, color=(255, 150, 0)))
+        return True
