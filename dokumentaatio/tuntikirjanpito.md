@@ -8,5 +8,7 @@
 | 26.11 | 6 | Käyttöliittymän laajennusta ja sovelluslogiikan refaktorointia |
 | 28.11 | 2 | Testausta |
 | 2.12 | 2 | Sovelluslogiikan laajennusta |
-| 28.11 | 6 | Uusien toiminnallisuuksien lisäämistä ja käyttöliittymän laajentamista |
-| yht | 27 |  |
+| 4.12 | 6 | Uusien toiminnallisuuksien lisäämistä ja käyttöliittymän laajentamista |
+| 5.12 | 7 | Pelilaudan viimeiset perustoiminnallisuudet ja käyttöliittymän laajentamista |
+| 6.12 | 3 | Testausta ja sekvenssikaavio |
+| yht | 37 |  |
