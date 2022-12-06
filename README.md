@@ -1,5 +1,6 @@
 # Miinaharava
-
+## Uusin release
+* [Release1](https://github.com/Codboez/ot-harjoitustyo/releases/tag/viikko5)
 ## Asennus
 1. Asenna ohjelman riippuvuudet komennolla
 ```
