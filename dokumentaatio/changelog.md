@@ -10,3 +10,9 @@
 * Lisätty luokka Button, jossa on nappulan toiminnallisuus.
 * Testattu pelilaudan kaikki tämänhetkinen toiminnallisuus.
 * Testattu moduulin button_functions kaikki tämänhetkinen toiminnallisuus.
+## Viikko 5
+* Lisätty luokka StartView, joka renderöi aloitusnäkymän.
+* Tehty kaikki miinaharavan perustoiminnallisuudet loppuun.
+* Aloitusnäkymästä voi luoda eri tasoisia pelilautoja ja myös kustoimoidun laudan.
+* Lisätty luokat InputField, TextObject ja panel.
+* Kasvatettu pelilaudan ja moduulin button_functions testausta.
