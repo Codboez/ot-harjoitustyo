@@ -144,7 +144,7 @@ class Board:
         font = self.__game.create_font_with_new_size(30)
         text_object = TextObject("You win", (600, 50), font, color=(0, 255, 0))
         self.__game.window.current_view.add_message(text_object)
-        scores.add_score("Dev", scores.get_board_id(self.size[0], self.size[1],
+        scores.add_score("Default", scores.get_board_id(self.size[0], self.size[1],
                          self.__mine_chance), time.time() - self.start_time)
 
     def check_win(self) -> bool:

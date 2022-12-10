@@ -16,7 +16,7 @@ def __create_table_boards():
     execute_sql_command(sql, [])
 
 def set_up():
-    open("database/scores.db").close()
+    open("database/scores.db", "x").close()
 
     __create_table_scores()
     __create_table_boards()

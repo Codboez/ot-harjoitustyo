@@ -101,7 +101,6 @@ class StartView:
         self.__leaderboard_objects.append(TextObject("Time", (pos[0] + 100, pos[1] + 20), font))
         self.__leaderboard_objects.append(TextObject("Creation date", (pos[0] + 180, pos[1] + 20), font))
 
-        #difficulty = "Easy"
         if i == 0:
             difficulty = "Easy"
         elif i == 1:
