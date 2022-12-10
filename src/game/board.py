@@ -1,7 +1,9 @@
 import random
 import functools
+import time
 from ui.text_object import TextObject
 from game.cell import button_functions, Cell
+from database import scores
 
 class Board:
     def __init__(self, width: int, height: int, mine_chance: int, game) -> None:
@@ -13,6 +15,7 @@ class Board:
         self.__game = game
         self.game_over = False
         self.open_cell_recursion_stack_size = 0
+        self.start_time = 0
         self.calculate_cell_size()
         font = self.calculate_cell_font_size()
         self.add_cells(font)
@@ -34,7 +37,7 @@ class Board:
         elif cell.content == -1:
             self.lose()
 
-        if self.check_win():
+        if self.check_win() and not self.game_over:
             self.win()
 
         return True
@@ -87,6 +90,7 @@ class Board:
         self.generate_mines(start_pos)
         self.generate_numbers()
         self.__has_generated = True
+        self.start_time = time.time()
 
     def open_around_cell(self, pos: tuple, open_flagged: bool = True):
         for i in range(pos[1] - 1, pos[1] + 2):
@@ -140,6 +144,8 @@ class Board:
         font = self.__game.create_font_with_new_size(30)
         text_object = TextObject("You win", (600, 50), font, color=(0, 255, 0))
         self.__game.window.current_view.add_message(text_object)
+        scores.add_score("Dev", scores.get_board_id(self.size[0], self.size[1],
+                         self.__mine_chance), time.time() - self.start_time)
 
     def check_win(self) -> bool:
         for row in self.__board:
@@ -180,5 +186,5 @@ class Board:
         font = self.__game.create_font_with_new_size(20)
         self.__game.window.current_view.add_message(
             TextObject("Could not open any more cells in one click. " +
-                        "Game is still fully operational.", (350, 25), font, color=(255, 150, 0)))
+                       "Game is still fully operational.", (350, 25), font, color=(255, 150, 0)))
         return True

@@ -3,7 +3,9 @@ import functools
 from ui.button import Button
 from ui.input_field import InputField
 from ui.text_object import TextObject
+from ui.panel import Panel
 from game import button_functions
+from database import scores
 
 class StartView:
     def __init__(self, font, game) -> None:
@@ -13,8 +15,10 @@ class StartView:
         self.__input_fields = []
         self.__game = game
         self.__messages = []
+        self.__leaderboard_objects = []
         self.add_input_fields()
         self.add_buttons()
+        self.add_leaderboards()
 
     def update(self, screen):
         self.update_buttons()
@@ -25,6 +29,7 @@ class StartView:
         self.render_buttons(screen)
         self.render_input_fields(screen)
         self.render_messages(screen)
+        self.render_leaderboards(screen)
         pygame.display.flip()
 
     def click(self, mouse_button):
@@ -72,6 +77,41 @@ class StartView:
         input = InputField(580, 275, 130, 50, font, "Mine percentage")
         self.__input_fields.append(input)
 
+    def add_leaderboards(self):
+        easy = scores.get_sorted_scores_for_board(1, 10)
+        medium = scores.get_sorted_scores_for_board(2, 10)
+        hard = scores.get_sorted_scores_for_board(3, 10)
+        leaderboards = [easy, medium, hard]
+
+        font = self.__game.create_font_with_new_size(15)
+
+        for i in range(3):
+            self.add_leaderboard_top((200 + i * 300, 400), font, i)
+            for j in range(len(leaderboards[i])):
+                score = leaderboards[i][j]
+                text = f"{j + 1}. {score[1]:<15}{score[3]:.2f}{score[4]:>25}"
+                pos = (200 + i * 300, 400 + j * 20 - 90)
+                text_obj = TextObject(text, pos, font, container=(pos[0], pos[1], 300, 300))
+                self.__leaderboard_objects.append(text_obj)
+
+    def add_leaderboard_top(self, pos, font, i):
+        self.__leaderboard_objects.append(Panel(pos[0], pos[1], 300, 300, (253, 253, 253)))
+        self.__leaderboard_objects.append(Panel(pos[0], pos[1], 300, 40, (240, 240, 240)))
+        self.__leaderboard_objects.append(TextObject("Name", (pos[0] + 15, pos[1] + 20), font))
+        self.__leaderboard_objects.append(TextObject("Time", (pos[0] + 100, pos[1] + 20), font))
+        self.__leaderboard_objects.append(TextObject("Creation date", (pos[0] + 180, pos[1] + 20), font))
+
+        #difficulty = "Easy"
+        if i == 0:
+            difficulty = "Easy"
+        elif i == 1:
+            difficulty = "Medium"
+        else:
+            difficulty = "Hard"
+
+        text = TextObject(f"{difficulty} leaderboard", (pos[0] + 95, pos[1] - 20), font)
+        self.__leaderboard_objects.append(text)
+
     def update_buttons(self):
         for button in self.__buttons:
             button.update_hovered(self.mouse_pos)
@@ -92,6 +132,10 @@ class StartView:
     def render_messages(self, screen):
         for message in self.__messages:
             message.render(screen)
+
+    def render_leaderboards(self, screen):
+        for obj in self.__leaderboard_objects:
+            obj.render(screen)
 
     def add_message(self, message):
         self.__messages.append(message)
