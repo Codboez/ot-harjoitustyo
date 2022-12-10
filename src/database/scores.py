@@ -16,12 +16,14 @@ def __create_table_boards():
     execute_sql_command(sql, [])
 
 def set_up():
+    open("database/scores.db").close()
+
     __create_table_scores()
     __create_table_boards()
     add_default_boards()
 
 def add_board(width: int, height: int, mine_chance: int):
-    if (not isinstance(width, int) or not isinstance(height, int) 
+    if (not isinstance(width, int) or not isinstance(height, int)
             or not isinstance(mine_chance, int)):
         return
 
@@ -44,18 +46,18 @@ def add_score(player: str, board_id: int, time: float):
     sql += "VALUES(?, ?, ?, datetime('now', 'localtime'));"
     return execute_sql_command(sql, [player, board_id, time])
 
-def delete_score(id: int):
-    return execute_sql_command("DELETE FROM Scores WHERE id=?;", [id])
+def delete_score(score_id: int):
+    return execute_sql_command("DELETE FROM Scores WHERE id=?;", [score_id])
 
 def get_board_id(width: int, height: int, mine_chance: int) -> int:
     sql = "SELECT id FROM Boards WHERE width=? AND height=? AND mine_chance=?;"
-    id = execute_sql_select_command(sql, [width, height, mine_chance])
+    board_id = execute_sql_select_command(sql, [width, height, mine_chance])
 
-    if len(id) == 0:
+    if len(board_id) == 0:
         add_board(width, height, mine_chance)
         return get_board_id(width, height, mine_chance)
 
-    return id[0][0]
+    return board_id[0][0]
 
 def get_sorted_scores_for_board(board_id: int, limit: int) -> list:
     sql = "SELECT * FROM Scores WHERE board_id=? ORDER BY time LIMIT ?;"
@@ -76,7 +78,5 @@ def execute_sql_select_command(sql: str, args: list) -> list:
         database.close()
 
 if __name__ == "__main__":
-    print(get_sorted_scores_for_board(1, 10))
     print(get_all_boards())
     print(get_all_scores())
-    pass

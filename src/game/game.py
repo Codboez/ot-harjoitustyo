@@ -6,6 +6,7 @@ from database import scores
 class Game:
     def __init__(self) -> None:
         self.__running = True
+        self.check_database_exists()
         self.window = UI(1280, 720)
         self.font = self.window.font
         self.board = Board(10, 10, 20, self)
@@ -24,6 +25,6 @@ class Game:
     def create_font_with_new_size(self, size: int):
         return self.window.get_font_with_new_size(size)
 
-    def check_database_exists():
+    def check_database_exists(self):
         if not os.path.exists("database/scores.db"):
             scores.set_up()
