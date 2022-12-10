@@ -26,5 +26,5 @@ class Game:
         return self.window.get_font_with_new_size(size)
 
     def check_database_exists(self):
-        if not os.path.exists("database/scores.db"):
+        if not os.path.exists("scores.db"):
             scores.set_up()

@@ -6,7 +6,7 @@ def __create_table_scores():
     execute_sql_command(sql, [])
 
 def create_connection():
-    database = sqlite3.connect("database/scores.db")
+    database = sqlite3.connect("scores.db")
     database.isolation_level = None
     return database
 
@@ -16,7 +16,7 @@ def __create_table_boards():
     execute_sql_command(sql, [])
 
 def set_up():
-    open("database/scores.db", "x").close()
+    open("scores.db", "x").close()
 
     __create_table_scores()
     __create_table_boards()
