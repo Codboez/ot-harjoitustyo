@@ -6,7 +6,26 @@ from game.cell import button_functions, Cell
 from database import scores
 
 class Board:
+    """A minesweeper board.
+
+    Attributes:
+        size (tuple): The size of the board.
+        mines_non_flagged (int): The amount of mines that have not yet been flagged.
+        game_over (bool): Tells if the game has ended yet.
+        open_cell_recursion_stack_size (int): The amount of times open_cell has called itself.
+        Set this to 0 after every click.
+    """
+
     def __init__(self, width: int, height: int, mine_chance: int, game) -> None:
+        """Creates a Board object. Calculates the size of the cells and font used.
+
+        Args:
+            width (int): The width of the board.
+            height (int): The height of the board.
+            mine_chance (int): The percentage chance that mines will spawn with.
+            game (Game): The game that this board is attached to.
+        """
+
         self.size = (width, height)
         self.__mine_chance = mine_chance
         self.__has_generated = False
@@ -15,12 +34,21 @@ class Board:
         self.__game = game
         self.game_over = False
         self.open_cell_recursion_stack_size = 0
-        self.start_time = 0
+        self.__start_time = 0
         self.calculate_cell_size()
-        font = self.calculate_cell_font_size()
-        self.add_cells(font)
+        font = self.__calculate_cell_font_size()
+        self.__add_cells(font)
 
     def open_cell(self, pos: tuple) -> bool:
+        """Opens a cell at the given position.
+
+        Args:
+            pos (tuple): The position in the board that is being opened.
+
+        Returns:
+            bool: If this cell was opened successfully.
+        """
+
         if not self.__has_generated:
             self.generate((pos[0], pos[1]))
 
@@ -28,10 +56,10 @@ class Board:
             return False
 
         cell = self.__board[pos[1]][pos[0]]
-        self.update_cell(cell, pos)
+        self.__update_cell(cell, pos)
 
         if cell.content == 0:
-            if self.check_for_recursion_stack_overflow():
+            if self.__check_for_recursion_stack_overflow():
                 return False
             self.open_around_cell((pos[0], pos[1]))
         elif cell.content == -1:
@@ -43,10 +71,25 @@ class Board:
         return True
 
     def is_out_of_bounds(self, pos: tuple) -> bool:
+        """Checks if the given position is out of the bounds of the board.
+
+        Args:
+            pos (tuple): The position to check for.
+
+        Returns:
+            bool: If it is out of bounds.
+        """
+
         return (pos[0] < 0 or pos[0] >= len(self.__board[0])
                 or pos[1] < 0 or pos[1] >= len(self.__board))
 
     def generate_mines(self, start_pos: tuple):
+        """Generates the mines.
+
+        Args:
+            start_pos (tuple): The position on the board of the first click.
+        """
+
         if self.__has_generated:
             return
 
@@ -61,6 +104,9 @@ class Board:
                     self.mines_non_flagged += 1
 
     def generate_numbers(self):
+        """Generates the numbers for all cells
+        """
+
         if self.__has_generated:
             return
 
@@ -69,9 +115,9 @@ class Board:
                 if cell.content == -1:
                     continue
 
-                cell.content = self.count_mines_around_cell((j, i))
+                cell.content = self.__count_mines_around_cell((j, i))
 
-    def count_mines_around_cell(self, pos: tuple) -> int:
+    def __count_mines_around_cell(self, pos: tuple) -> int:
         amount = 0
         for i in range(pos[1] - 1, pos[1] + 2):
             for j in range(pos[0] - 1, pos[0] + 2):
@@ -87,12 +133,25 @@ class Board:
         return amount
 
     def generate(self, start_pos: tuple):
+        """Generates the board.
+
+        Args:
+            start_pos (tuple): The position on the board of the first click.
+        """
+
         self.generate_mines(start_pos)
         self.generate_numbers()
         self.__has_generated = True
-        self.start_time = time.time()
+        self.__start_time = time.time()
 
     def open_around_cell(self, pos: tuple, open_flagged: bool = True):
+        """Opens all cells around the given position.
+
+        Args:
+            pos (tuple): The position to open around.
+            open_flagged (bool, optional): If it should open flagged cells. Defaults to True.
+        """
+
         for i in range(pos[1] - 1, pos[1] + 2):
             for j in range(pos[0] - 1, pos[0] + 2):
                 if j == pos[0] and i == pos[1]:
@@ -109,10 +168,13 @@ class Board:
 
                 self.open_cell((j, i))
 
-    def get_board(self):
+    def get_board(self) -> list:
         return self.__board
 
     def print(self):
+        """Prints the board.
+        """
+
         for board_row in self.__board:
             row_print = ""
             for cell in board_row:
@@ -120,7 +182,7 @@ class Board:
                               else str(cell.content) + " ")
             print(row_print)
 
-    def add_cells(self, font):
+    def __add_cells(self, font):
         for i in range(self.size[1]):
             row = []
             for j in range(self.size[0]):
@@ -128,6 +190,9 @@ class Board:
             self.__board.append(row)
 
     def lose(self):
+        """The player loses the game. Adds a lose message to UI.
+        """
+
         if self.__game is None:
             return
 
@@ -137,6 +202,9 @@ class Board:
         self.__game.window.current_view.add_message(text_object)
 
     def win(self):
+        """The player wins the game. Adds a win message to UI. Adds a score to database.
+        """
+
         if self.__game is None:
             return
 
@@ -145,9 +213,15 @@ class Board:
         text_object = TextObject("You win", (600, 50), font, color=(0, 255, 0))
         self.__game.window.current_view.add_message(text_object)
         scores.add_score("Default", scores.get_board_id(self.size[0], self.size[1],
-                         self.__mine_chance), time.time() - self.start_time)
+                         self.__mine_chance), time.time() - self.__start_time)
 
     def check_win(self) -> bool:
+        """Checks if the player has won the game.
+
+        Returns:
+            bool: If the player has won the game.
+        """
+
         for row in self.__board:
             for cell in row:
                 if cell.hidden and cell.content != -1:
@@ -156,6 +230,9 @@ class Board:
         return True
 
     def calculate_cell_size(self):
+        """Calculates the cell size so that the board can fit on the screen.
+        """
+
         Cell.size = 35
 
         if self.size[0] * Cell.size > 1100:
@@ -164,13 +241,13 @@ class Board:
         if self.size[1] * Cell.size > 525:
             Cell.size = 525 // self.size[1]
 
-    def calculate_cell_font_size(self):
+    def __calculate_cell_font_size(self):
         if self.__game is None:
             return None
 
         return self.__game.create_font_with_new_size(Cell.size - 10)
 
-    def update_cell(self, cell, pos):
+    def __update_cell(self, cell, pos):
         cell.hidden = False
         cell.button.background.color = (200, 200, 200)
         cell.button.hover_background.color = (200, 200, 200)
@@ -178,7 +255,7 @@ class Board:
         cell.button.right_click_action = None
         cell.button.action = functools.partial(button_functions.open_around_an_open_cell, self, pos)
 
-    def check_for_recursion_stack_overflow(self) -> bool:
+    def __check_for_recursion_stack_overflow(self) -> bool:
         if self.open_cell_recursion_stack_size <= 450:
             self.open_cell_recursion_stack_size += 1
             return False

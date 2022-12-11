@@ -1,7 +1,21 @@
 def open_cell(board, pos):
+    """Calls the board to open the cell at the given position.
+
+    Args:
+        board (Board): The board that the cell is attached to.
+        pos (tuple): The position in the board that is opened.
+    """
+
     board.open_cell(pos)
 
 def switch_flagged(cell, board):
+    """Alternates the given cell between flagged and not flagged.
+
+    Args:
+        cell (Cell): The cell whose flagged is flipped.
+        board (Board): The board that the cell is attached to.
+    """
+
     cell.flagged = not cell.flagged
 
     if cell.flagged:
@@ -12,10 +26,28 @@ def switch_flagged(cell, board):
         cell.button.text.text = ""
 
 def create_board(width: int, height: int, mine_chance: int, game):
+    """Calls the game to create a board with the given information.
+
+    Args:
+        width (int): The width of the new board.
+        height (int): The height of the new board.
+        mine_chance (int): The mine chance of the new board.
+        game (Game): The game that a new board is being created to.
+    """
+
     game.create_board(width, height, mine_chance)
     game.change_state(0)
 
 def create_custom_board(width, height, mine_chance, game):
+    """Creates a board with custom information if inputs are valid.
+
+    Args:
+        width (TextObject): The text object that contains the width of the new board.
+        height (TextObject): The text object that contains the height of the new board.
+        mine_chance (TextObject): The text object that contains the mine chance of the new board.
+        game (Game): The game that a new board is being created to.
+    """
+
     game.window.current_view.delete_messages()
     has_invalid_inputs = has_invalid_inputs_for_custom_board_creation(width, height, mine_chance)
 
@@ -27,6 +59,17 @@ def create_custom_board(width, height, mine_chance, game):
     game.change_state(0)
 
 def has_invalid_inputs_for_custom_board_creation(width, height, mine_chance) -> tuple:
+    """Checks if the given inputs are invalid.
+
+    Args:
+        width (TextObject): The text object that contains the width of the new board.
+        height (TextObject): The text object that contains the height of the new board.
+        mine_chance (TextObject): The text object that contains the mine chance of the new board.
+
+    Returns:
+        tuple: If the inputs were invalid, The error message.
+    """
+
     try:
         width = int(width.text)
         height = int(height.text)
@@ -46,6 +89,13 @@ def has_invalid_inputs_for_custom_board_creation(width, height, mine_chance) -> 
     return (False, "")
 
 def open_around_an_open_cell(board, pos):
+    """Opens around a cell if enough flags are surrounding it.
+
+    Args:
+        board (Board): The board should get opened.
+        pos (tuple): The position on the board to open around.
+    """
+
     for i in range(pos[1] - 1, pos[1] + 2):
         for j in range(pos[0] - 1, pos[0] + 2):
             if board.is_out_of_bounds((j, i)):

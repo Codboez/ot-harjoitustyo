@@ -3,10 +3,32 @@ from ui.button import Button
 from game import button_functions
 
 class Cell:
+    """A single cell in a board.
+
+    Atrributes:
+        content (int): The amount of mines surrounding this cell. Is -1 if this cell is a mine.
+        hidden (bool): If True this cell has not been opened yet.
+        flagged (bool): If this cell has been flagged as mine.
+        pos (tuple): The position on the screen.
+        button (Button): The button for this cell.
+    """
+
     size = 35
 
     def __init__(self, board, pos: tuple, font, content: int = 0,
                  hidden: bool = True, flagged: bool = False) -> None:
+        """Creates a cell and the button attached to it.
+
+        Args:
+            board (Board): The board this cell is attached to.
+            pos (tuple): The position on the board.
+            font (Font): The font used for the button text.
+            hidden (bool, optional): If True this cell has not been opened yet. Defaults to True.
+            flagged (bool, optional): If this cell has been flagged as mine. Defaults to False.
+            content (int, optional): The amount of mines surrounding this cell.
+            Is -1 if this cell is a mine. Defaults to 0.
+        """
+
         self.__board = board
         self.content = content
         self.hidden = hidden
