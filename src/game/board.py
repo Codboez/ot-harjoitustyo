@@ -3,7 +3,6 @@ import functools
 import time
 from ui.text_object import TextObject
 from game.cell import button_functions, Cell
-from database import scores
 
 class Board:
     """A minesweeper board.
@@ -231,8 +230,8 @@ class Board:
             return
 
         self.end_game("You win", (0, 255, 0))
-        scores.add_score("Default", scores.get_board_id(self.size[0], self.size[1],
-                         self.__mine_chance), self.end_time - self.start_time)
+        board_id = self.__game.database.get_board_id(self.size[0], self.size[1], self.__mine_chance)
+        self.__game.database.add_score("Default", board_id, self.end_time - self.start_time)
 
     def end_game(self, message: str, color: tuple):
         """Ends the game. Adds a message to the UI.

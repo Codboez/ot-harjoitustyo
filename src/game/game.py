@@ -1,7 +1,7 @@
 import os
 from ui.ui import UI
 from game.board import Board
-from database import scores
+from database.scores import Scores
 
 class Game:
     """Minesweeper game. Controls the board and the UI.
@@ -21,6 +21,7 @@ class Game:
         """
 
         self.__running = True
+        self.database = Scores("scores.db")
         self.check_database_exists()
         self.window = UI(screen_width, screen_height)
         self.font = self.window.font
@@ -70,5 +71,5 @@ class Game:
         """Creates a new database file if one does not already exist.
         """
 
-        if not os.path.exists("scores.db"):
-            scores.set_up()
+        if not os.path.exists(self.database.file_path):
+            self.database.set_up()

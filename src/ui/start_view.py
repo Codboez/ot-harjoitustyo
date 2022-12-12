@@ -110,9 +110,9 @@ class StartView:
         self.__input_fields.append(input)
 
     def __add_leaderboards(self):
-        easy = scores.get_sorted_scores_for_board(1, 10)
-        medium = scores.get_sorted_scores_for_board(2, 10)
-        hard = scores.get_sorted_scores_for_board(3, 10)
+        easy = self.__game.database.get_sorted_scores_for_board(1, 10)
+        medium = self.__game.database.get_sorted_scores_for_board(2, 10)
+        hard = self.__game.database.get_sorted_scores_for_board(3, 10)
         leaderboards = [easy, medium, hard]
 
         font = self.__game.create_font_with_new_size(15)

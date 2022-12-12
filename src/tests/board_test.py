@@ -105,3 +105,10 @@ class TestBoard(unittest.TestCase):
         self.board = Board(50, 30, 20, None)
         self.board.calculate_cell_size()
         self.assertEqual(Cell.size, 17)
+
+    def test_counts_flags_around_cell_correctly(self):
+        self.board = Board(10, 10, 100, None)
+        self.board.open_cell((0, 0))
+        self.board.get_board()[0][2].flagged = True
+        amount = self.board.count_flags_around_cell((1, 0))
+        self.assertEqual(amount, 1)

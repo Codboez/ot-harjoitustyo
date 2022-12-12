@@ -1,176 +1,176 @@
 import sqlite3
 
-def __create_table_scores():
-    sql = "CREATE TABLE Scores(id INTEGER PRIMARY KEY, "
-    sql += "player VARCHAR(255), board_id INTEGER, time FLOAT, creation_date DATETIME);"
-    execute_sql_command(sql, [])
+class Scores:
+    def __init__(self, file_path) -> None:
+        self.file_path = file_path
 
-def create_connection(file_path: str = "scores.db"):
-    """Creates a connection to the given database file.
+    def __create_table_scores(self):
+        sql = "CREATE TABLE Scores(id INTEGER PRIMARY KEY, "
+        sql += "player VARCHAR(255), board_id INTEGER, time FLOAT, creation_date DATETIME);"
+        self.execute_sql_command(sql, [])
 
-    Args:
-        file_path (str, optional): The path to the database file. Defaults to "scores.db".
+    def create_connection(self):
+        """Creates a connection to the given database file.
 
-    Returns:
-        Connection: The connection to the database.
-    """
+        Args:
+            file_path (str, optional): The path to the database file. Defaults to "scores.db".
 
-    database = sqlite3.connect(file_path)
-    database.isolation_level = None
-    return database
+        Returns:
+            Connection: The connection to the database.
+        """
 
-def __create_table_boards():
-    sql = "CREATE TABLE Boards(id INTEGER PRIMARY KEY, width INTEGER,"
-    sql += " height INTEGER, mine_chance INTEGER);"
-    execute_sql_command(sql, [])
+        database = sqlite3.connect(self.file_path)
+        database.isolation_level = None
+        return database
 
-def set_up():
-    """Creates and sets up a new database file.
-    """
+    def __create_table_boards(self):
+        sql = "CREATE TABLE Boards(id INTEGER PRIMARY KEY, width INTEGER,"
+        sql += " height INTEGER, mine_chance INTEGER);"
+        self.execute_sql_command(sql, [])
 
-    with open("scores.db", "x", encoding="utf-8"):
-        pass
+    def set_up(self):
+        """Creates and sets up a new database file.
+        """
 
-    __create_table_scores()
-    __create_table_boards()
-    add_default_boards()
+        with open(self.file_path, "x", encoding="utf-8"):
+            pass
 
-def add_board(width: int, height: int, mine_chance: int):
-    """Adds a new board to the database.
+        self.__create_table_scores()
+        self.__create_table_boards()
+        self.add_default_boards()
 
-    Args:
-        width (int): The width of the board.
-        height (int): The height of the board.
-        mine_chance (int): The mine chance of the board.
-    """
+    def add_board(self, width: int, height: int, mine_chance: int):
+        """Adds a new board to the database.
 
-    if (not isinstance(width, int) or not isinstance(height, int)
-            or not isinstance(mine_chance, int)):
-        return
+        Args:
+            width (int): The width of the board.
+            height (int): The height of the board.
+            mine_chance (int): The mine chance of the board.
+        """
 
-    sql = "INSERT INTO Boards(width, height, mine_chance) VALUES(?, ?, ?);"
-    execute_sql_command(sql, [width, height, mine_chance])
+        if (not isinstance(width, int) or not isinstance(height, int)
+                or not isinstance(mine_chance, int)):
+            return
 
-def add_default_boards():
-    """Adds the default boards to the database.
-    """
+        sql = "INSERT INTO Boards(width, height, mine_chance) VALUES(?, ?, ?);"
+        self.execute_sql_command(sql, [width, height, mine_chance])
 
-    add_board(10, 10, 15)
-    add_board(15, 15, 20)
-    add_board(30, 20, 25)
+    def add_default_boards(self):
+        """Adds the default boards to the database.
+        """
 
-def get_all_boards() -> list:
-    """Gets all boards from the database.
+        self.add_board(10, 10, 15)
+        self.add_board(15, 15, 20)
+        self.add_board(30, 20, 25)
 
-    Returns:
-        list: A list of all boards.
-    """
+    def get_all_boards(self) -> list:
+        """Gets all boards from the database.
 
-    return execute_sql_select_command("SELECT * FROM Boards;", [])
+        Returns:
+            list: A list of all boards.
+        """
 
-def get_all_scores() -> list:
-    """Gets all scores from the database.
+        return self.execute_sql_select_command("SELECT * FROM Boards;", [])
 
-    Returns:
-        list: A list of all scores.
-    """
+    def get_all_scores(self) -> list:
+        """Gets all scores from the database.
 
-    return execute_sql_select_command("SELECT * FROM Scores;", [])
+        Returns:
+            list: A list of all scores.
+        """
 
-def add_score(player: str, board_id: int, time: float):
-    """Adds a score to the database.
+        return self.execute_sql_select_command("SELECT * FROM Scores;", [])
 
-    Args:
-        player (str): The name of the player.
-        board_id (int): The id of the board.
-        time (float): The time it took to finish the game.
-    """
+    def add_score(self, player: str, board_id: int, time: float):
+        """Adds a score to the database.
 
-    sql = "INSERT INTO Scores(player, board_id, time, creation_date) "
-    sql += "VALUES(?, ?, ?, datetime('now', 'localtime'));"
-    execute_sql_command(sql, [player, board_id, time])
+        Args:
+            player (str): The name of the player.
+            board_id (int): The id of the board.
+            time (float): The time it took to finish the game.
+        """
 
-def delete_score(score_id: int):
-    """Deletes a score from the database.
+        sql = "INSERT INTO Scores(player, board_id, time, creation_date) "
+        sql += "VALUES(?, ?, ?, datetime('now', 'localtime'));"
+        self.execute_sql_command(sql, [player, board_id, time])
 
-    Args:
-        score_id (int): The id of the score.
-    """
+    def delete_score(self, score_id: int):
+        """Deletes a score from the database.
 
-    execute_sql_command("DELETE FROM Scores WHERE id=?;", [score_id])
+        Args:
+            score_id (int): The id of the score.
+        """
 
-def get_board_id(width: int, height: int, mine_chance: int) -> int:
-    """Gets the id of the board with the given information.
-    If a board with the given information does not exist it adds a new board.
+        self.execute_sql_command("DELETE FROM Scores WHERE id=?;", [score_id])
 
-    Args:
-        width (int): The width of the board.
-        height (int): The height of the board.
-        mine_chance (int): The mine chance of the board.
+    def get_board_id(self, width: int, height: int, mine_chance: int) -> int:
+        """Gets the id of the board with the given information.
+        If a board with the given information does not exist it adds a new board.
 
-    Returns:
-        int: The id of the board.
-    """
+        Args:
+            width (int): The width of the board.
+            height (int): The height of the board.
+            mine_chance (int): The mine chance of the board.
 
-    sql = "SELECT id FROM Boards WHERE width=? AND height=? AND mine_chance=?;"
-    board_id = execute_sql_select_command(sql, [width, height, mine_chance])
+        Returns:
+            int: The id of the board.
+        """
 
-    if len(board_id) == 0:
-        add_board(width, height, mine_chance)
-        return get_board_id(width, height, mine_chance)
+        sql = "SELECT id FROM Boards WHERE width=? AND height=? AND mine_chance=?;"
+        board_id = self.execute_sql_select_command(sql, [width, height, mine_chance])
 
-    return board_id[0][0]
+        if len(board_id) == 0:
+            self.add_board(width, height, mine_chance)
+            return self.get_board_id(width, height, mine_chance)
 
-def get_sorted_scores_for_board(board_id: int, limit: int) -> list:
-    """Get the scores of the given board sorted by time.
+        return board_id[0][0]
 
-    Args:
-        board_id (int): The id of the board.
-        limit (int): The maximum amount of scores returned.
+    def get_sorted_scores_for_board(self, board_id: int, limit: int) -> list:
+        """Get the scores of the given board sorted by time.
 
-    Returns:
-        list: A list of scores.
-    """
+        Args:
+            board_id (int): The id of the board.
+            limit (int): The maximum amount of scores returned.
 
-    sql = "SELECT * FROM Scores WHERE board_id=? ORDER BY time LIMIT ?;"
-    return execute_sql_select_command(sql, [board_id, limit])
+        Returns:
+            list: A list of scores.
+        """
 
-def execute_sql_command(sql: str, args: list):
-    """Executes the given sql command with the given arguments.
+        sql = "SELECT * FROM Scores WHERE board_id=? ORDER BY time LIMIT ?;"
+        return self.execute_sql_select_command(sql, [board_id, limit])
 
-    Args:
-        sql (str): The sql command.
-        args (list): The arguments for the sql command.
-    """
+    def execute_sql_command(self, sql: str, args: list):
+        """Executes the given sql command with the given arguments.
 
-    try:
-        database = create_connection()
-        database.execute(sql, args)
-    except sqlite3.OperationalError:
-        print("The path to the database file is invalid.")
-    finally:
-        database.close()
+        Args:
+            sql (str): The sql command.
+            args (list): The arguments for the sql command.
+        """
 
-def execute_sql_select_command(sql: str, args: list) -> list:
-    """Executes the given sql select command with the given arguments.
+        try:
+            database = self.create_connection()
+            database.execute(sql, args)
+        except sqlite3.OperationalError:
+            print("The path to the database file is invalid.")
+        finally:
+            database.close()
 
-    Args:
-        sql (str): A select command.
-        args (list): The arguments for the command.
+    def execute_sql_select_command(self, sql: str, args: list) -> list:
+        """Executes the given sql select command with the given arguments.
 
-    Returns:
-        list: A list of what the select command returned.
-    """
+        Args:
+            sql (str): A select command.
+            args (list): The arguments for the command.
 
-    try:
-        database = create_connection()
-        return database.execute(sql, args).fetchall()
-    except sqlite3.OperationalError:
-        print("The path to the database file is invalid.")
-        return None
-    finally:
-        database.close()
+        Returns:
+            list: A list of what the select command returned.
+        """
 
-if __name__ == "__main__":
-    print(get_all_boards())
-    print(get_all_scores())
+        try:
+            database = self.create_connection()
+            return database.execute(sql, args).fetchall()
+        except sqlite3.OperationalError:
+            print("The path to the database file is invalid.")
+            return None
+        finally:
+            database.close()
