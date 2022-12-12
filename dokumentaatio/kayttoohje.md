@@ -26,6 +26,8 @@ Kirjoita syötekenttään "mine percentage" miinojen syntymisen prosenttimahdoll
 Peli alkaa klikkaamalla yhtä pelilaudan harmaista ruuduista. Klikkaamalla ruutua, ruutu avautuu ja paljastaa numeron.
 Numero kertoo ympärillä olevien miinojen määrän (vaakasuorassa, pystysuorassa ja diagonaalisesti).
 Jos ruutu on 0, peli avaa automaattisesti kaikki tämän ympärillä olevat ruudut.
+Pelilaudan vasemmassa yläkulmassa lukee merkkaamattomien miinojen määrä.
+Pelilaudan oikeassa yläkulmassa lukee tähän peliin käytetty aika.
 
 ![](./kuvat/first_cell_open.PNG)
 
@@ -35,7 +37,7 @@ Jos avaat miinan, häviät. Miinoja kuvataan pelissä numerolla -1.
 
 Voit klikata piilotettua ruutua hiiren oikealla näppäimellä. Tämä merkkaa ruudun lipulla. Merkattua ruutua näytetään kirjaimella F.
 
-Voit myös klikata jos avattua ruutua. Tämä avaa kaikki sen ympärillä olevat merkkaamattomat piilotetut ruudut, jos sen ympärillä olevia ruutuja on merkattu tarpeeksi.
+Voit myös klikata jo avattua ruutua. Tämä avaa kaikki sen ympärillä olevat merkkaamattomat piilotetut ruudut, jos sen ympärillä olevia ruutuja on merkattu tarpeeksi.
 
 Jos avaat kaikki ruudut, missä ei ole miinaa, voitat pelin.
 
