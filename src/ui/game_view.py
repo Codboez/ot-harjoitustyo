@@ -1,5 +1,6 @@
 import pygame
 import functools
+import time
 from game.board import Board
 from game.cell import Cell
 from ui.button import Button
@@ -79,10 +80,17 @@ class GameView:
           screen.get_height() / 2 - board_size[1] / 2 - 5, board_size[0] + 30, board_size[1] + 90))
 
     def __render_board_top(self, screen):
-        #pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(cell.pos[0], cell.pos[1], Cell.size(), Cell.size()))
         board_size = self.__calculate_board_size_on_screen()
         text = self.__font[0].render(f"{self.__board.mines_non_flagged}", True, (0, 0, 0))
         screen.blit(text, (screen.get_width() / 2 - board_size[0] / 2 + 30,
+          screen.get_height() / 2 - board_size[1] / 2 + 20))
+
+        if not self.__board.game_over and self.__board.start_time != 0:
+            time_passed = f"{time.time() - self.__board.start_time:.2f}"
+        else:
+            time_passed = f"{self.__board.end_time - self.__board.start_time:.2f}"
+        text = self.__font[0].render(f"{time_passed:>8}", True, (0, 0, 0))
+        screen.blit(text, (screen.get_width() / 2 + board_size[0] / 2 - 80,
           screen.get_height() / 2 - board_size[1] / 2 + 20))
 
     def __add_buttons(self):

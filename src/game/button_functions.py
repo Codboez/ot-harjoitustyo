@@ -96,14 +96,7 @@ def open_around_an_open_cell(board, pos):
         pos (tuple): The position on the board to open around.
     """
 
-    for i in range(pos[1] - 1, pos[1] + 2):
-        for j in range(pos[0] - 1, pos[0] + 2):
-            if board.is_out_of_bounds((j, i)):
-                continue
-
-            cell = board.get_board()[i][j]
-
-            if cell.content == -1 and not cell.flagged:
-                return
+    if board.count_flags_around_cell(pos) != board.get_board()[pos[1]][pos[0]].content:
+        return
 
     board.open_around_cell(pos, False)

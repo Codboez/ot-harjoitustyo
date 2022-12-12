@@ -34,7 +34,8 @@ class Board:
         self.__game = game
         self.game_over = False
         self.open_cell_recursion_stack_size = 0
-        self.__start_time = 0
+        self.start_time = 0
+        self.end_time = 0
         self.calculate_cell_size()
         font = self.__calculate_cell_font_size()
         self.__add_cells(font)
@@ -132,6 +133,30 @@ class Board:
 
         return amount
 
+    def count_flags_around_cell(self, pos: tuple) -> int:
+        """Counts the flagged cells around the cell at the given position.
+
+        Args:
+            pos (tuple): The position in the board the cell is in.
+
+        Returns:
+            int: The amount of flags around the cell.
+        """
+
+        amount = 0
+        for i in range(pos[1] - 1, pos[1] + 2):
+            for j in range(pos[0] - 1, pos[0] + 2):
+                if j == pos[0] and i == pos[1]:
+                    continue
+
+                if self.is_out_of_bounds((j, i)):
+                    continue
+
+                if self.__board[i][j].flagged:
+                    amount += 1
+
+        return amount
+
     def generate(self, start_pos: tuple):
         """Generates the board.
 
@@ -142,7 +167,7 @@ class Board:
         self.generate_mines(start_pos)
         self.generate_numbers()
         self.__has_generated = True
-        self.__start_time = time.time()
+        self.start_time = time.time()
 
     def open_around_cell(self, pos: tuple, open_flagged: bool = True):
         """Opens all cells around the given position.
@@ -190,30 +215,38 @@ class Board:
             self.__board.append(row)
 
     def lose(self):
-        """The player loses the game. Adds a lose message to UI.
+        """The player loses the game. Ends the game
         """
 
         if self.__game is None:
             return
 
-        self.game_over = True
-        font = self.__game.create_font_with_new_size(30)
-        text_object = TextObject("You lose", (600, 50), font, color=(255, 0, 0))
-        self.__game.window.current_view.add_message(text_object)
+        self.end_game("You lose", (255, 0, 0))
 
     def win(self):
-        """The player wins the game. Adds a win message to UI. Adds a score to database.
+        """The player wins the game. Ends the game. Adds a score to database.
         """
 
         if self.__game is None:
             return
 
+        self.end_game("You win", (0, 255, 0))
+        scores.add_score("Default", scores.get_board_id(self.size[0], self.size[1],
+                         self.__mine_chance), self.end_time - self.start_time)
+
+    def end_game(self, message: str, color: tuple):
+        """Ends the game. Adds a message to the UI.
+
+        Args:
+            message (str): The message that gets added to the UI.
+            color (tuple): The color that the text gets rendered in.
+        """
+
         self.game_over = True
         font = self.__game.create_font_with_new_size(30)
-        text_object = TextObject("You win", (600, 50), font, color=(0, 255, 0))
+        text_object = TextObject(message, (600, 50), font, color=color)
         self.__game.window.current_view.add_message(text_object)
-        scores.add_score("Default", scores.get_board_id(self.size[0], self.size[1],
-                         self.__mine_chance), time.time() - self.__start_time)
+        self.end_time = time.time()
 
     def check_win(self) -> bool:
         """Checks if the player has won the game.
@@ -248,7 +281,11 @@ class Board:
         return self.__game.create_font_with_new_size(Cell.size - 10)
 
     def __update_cell(self, cell, pos):
+        if cell.flagged:
+            self.mines_non_flagged += 1
+
         cell.hidden = False
+        cell.flagged = False
         cell.button.background.color = (200, 200, 200)
         cell.button.hover_background.color = (200, 200, 200)
         cell.button.text.text = str(cell.content)

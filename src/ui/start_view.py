@@ -121,7 +121,8 @@ class StartView:
             self.__add_leaderboard_top((200 + i * 300, 400), font, i)
             for j in range(len(leaderboards[i])):
                 score = leaderboards[i][j]
-                text = f"{j + 1}. {score[1]:<15}{score[3]:.2f}{score[4]:>25}"
+                time = f"{score[3]:.2f}"
+                text = f"{j + 1:>2}. {score[1]:<13}{time:>6}{score[4]:>25}"
                 pos = (200 + i * 300, 400 + j * 20 - 90)
                 text_obj = TextObject(text, pos, font, container=(pos[0], pos[1], 300, 300))
                 self.__leaderboard_objects.append(text_obj)
