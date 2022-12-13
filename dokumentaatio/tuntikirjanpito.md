@@ -11,4 +11,8 @@
 | 4.12 | 6 | Uusien toiminnallisuuksien lisäämistä ja käyttöliittymän laajentamista |
 | 5.12 | 7 | Pelilaudan viimeiset perustoiminnallisuudet ja käyttöliittymän laajentamista |
 | 6.12 | 3 | Testausta ja sekvenssikaavio |
-| yht | 37 |  |
+| 10.12 | 4 | Tietokannan tekeminen. Tulostaulut |
+| 11.12 | 3 | Docstringien tekemistä |
+| 12.12 | 7 | Käyttöohje. Testien, docstringien ja toiminnallisuuksien viimeistelyjä |
+| 13.12 | 3 | Arkkitehtuurikuvaus |
+| yht | 54 |  |
