@@ -16,3 +16,7 @@
 * Aloitusnäkymästä voi luoda eri tasoisia pelilautoja ja myös kustoimoidun laudan.
 * Lisätty luokat InputField, TextObject ja panel.
 * Kasvatettu pelilaudan ja moduulin button_functions testausta.
+## Viikko 6
+* Lisätty luokka Scores, joka hallitsee tietokantaa. Tietokantaan tallennetaan tuloksia pelikerroista.
+* Tietokannan tulokset renderöidään tulostauluihin.
+* Testattu luokka Scores.
