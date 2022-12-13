@@ -70,11 +70,11 @@ class UI:
                 self.current_view.keydown(event.unicode)
         return True
 
-    def change_state(self, state: int, board, game):
+    def change_state(self, state: int, game):
         """Changes the scene that gets rendered.
 
         Args:
-            state (int): The state that should be changed to.
+            state (int): The state that should be changed to. State 0 is GameView, state 1 is StartView.
             board (Board): The board attached to the game.
             game (_type_): The game that is controlling this UI.
         """
@@ -83,7 +83,7 @@ class UI:
             return
 
         if state == 0:
-            self.current_view = GameView(board, self.font, game)
+            self.current_view = GameView(self.font, game)
         elif state == 1:
             self.current_view = StartView(self.font, game)
         

@@ -195,17 +195,6 @@ class Board:
     def get_board(self) -> list:
         return self.__board
 
-    def print(self):
-        """Prints the board.
-        """
-
-        for board_row in self.__board:
-            row_print = ""
-            for cell in board_row:
-                row_print += ("m " if cell.content == -1
-                              else str(cell.content) + " ")
-            print(row_print)
-
     def __add_cells(self, font):
         for i in range(self.size[1]):
             row = []

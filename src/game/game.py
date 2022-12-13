@@ -42,7 +42,7 @@ class Game:
             state (int): The scene that will be enabled.
         """
 
-        self.window.change_state(state, self.board, self)
+        self.window.change_state(state, self)
 
     def create_board(self, width, height, mine_chance):
         """Creates a new board with the given information.

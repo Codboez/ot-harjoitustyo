@@ -5,7 +5,6 @@ from ui.input_field import InputField
 from ui.text_object import TextObject
 from ui.panel import Panel
 from game import button_functions
-from database import scores
 
 class StartView:
     """This class creates and renders the start view of the UI.
