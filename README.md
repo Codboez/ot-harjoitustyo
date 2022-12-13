@@ -1,6 +1,6 @@
 # Miinaharava
 ## Uusin release
-* [Release1](https://github.com/Codboez/ot-harjoitustyo/releases/tag/viikko5)
+* [Release2](https://github.com/Codboez/ot-harjoitustyo/releases/tag/viikko6)
 ## Asennus
 1. Asenna ohjelman riippuvuudet komennolla
 ```
@@ -15,6 +15,7 @@ poetry run invoke start
 * [Tuntikirjanpito](https://github.com/Codboez/ot-harjoitustyo/blob/master/dokumentaatio/tuntikirjanpito.md)
 * [Changelog](https://github.com/Codboez/ot-harjoitustyo/blob/master/dokumentaatio/changelog.md)
 * [Arkkitehtuuri](https://github.com/Codboez/ot-harjoitustyo/blob/master/dokumentaatio/arkkitehtuuri.md)
+* [Käyttöohje](https://github.com/Codboez/ot-harjoitustyo/blob/master/dokumentaatio/kayttoohje.md)
 ## Poetry tehtäväkomentoja
 * Käynnistä sovellus
 ```
