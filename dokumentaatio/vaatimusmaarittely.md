@@ -17,5 +17,5 @@ Sovelluksen ideana on olla oma versio Miinaharava pelistä.
   * ✔️ Sisältää aloitusnäkymän, missä voi luoda eritasoisia Miinaharava lautoja, ja näkymän itse Miinaharava pelistä.
 
 ## Jatkokehitysideoita
-* Pelaajan voittaessa pelin, peli tallentaa tietokantaan pelin tiedot.
-* Peli näyttää pelaajalle tulostaulun lokaaleista aikaennätyksistä jokaiselle vaikeustasolle.
+* ✔️ Pelaajan voittaessa pelin, peli tallentaa tietokantaan pelin tiedot.
+* ✔️ Peli näyttää pelaajalle tulostaulun lokaaleista aikaennätyksistä jokaiselle vaikeustasolle.
