@@ -15,4 +15,5 @@
 | 11.12 | 3 | Docstringien tekemistä |
 | 12.12 | 7 | Käyttöohje. Testien, docstringien ja toiminnallisuuksien viimeistelyjä |
 | 13.12 | 3 | Arkkitehtuurikuvaus |
-| yht | 54 |  |
+| 23.12 | 1 | Testausdokumentti |
+| yht | 55 |  |
